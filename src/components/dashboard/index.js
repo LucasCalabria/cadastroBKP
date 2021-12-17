@@ -1,12 +1,5 @@
-import React from "react";
-import DashForm from "./dashForm";
-/*
-const getFreshModelObject = () =>({
-    amdMasterId : 0,
-    admNome : 'none',
-    deletedRestIds: '',
-    restLista: []
-})*/
+import React from "react"
+import DashForm from "./dashForm"
 
 export default function Dash(){
     return(

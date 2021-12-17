@@ -11,7 +11,7 @@ function DashPage(){
       align = "center">
         Bem Vindo!
       </Typography>
-        <Dash />
+      <Dash />
     </Container>
     )
 }
