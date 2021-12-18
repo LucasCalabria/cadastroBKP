@@ -37,22 +37,26 @@ export default function DashForm(){
     localStorage.setItem("editId",selected)
     localStorage.setItem("idAdm", idAdm)
 
-    const handleSubmit = () =>{
+    const handleDelete = () =>{
         (async function removeRestaurant(){
             const resp = await RestaurantService.getAdmById(idAdm)
             let rests = resp["restaurants"]
             console.log(rests)
 
-            rests.splice(selected, 1)
-            for(let j=selected; j<rests.length;j++){
-                rests[j]["idRest"] -= 1
+            if(selected){
+                rests.splice(selected, 1)
+                for(let j=selected; j<rests.length;j++){
+                    rests[j]["idRest"] -= 1
+                }
+                let admin = resp
+                admin["restaurants"] = rests
+                RestaurantService.updateAdm(idAdm, admin)
+                alert("Restaurante Removido com Sucesso")
+                window.location.reload()
             }
-            let admin = resp
-            admin["restaurants"] = rests
-
-            RestaurantService.updateAdm(idAdm, admin)
-            alert("Restaurante Removido com Sucesso")
-            window.location.reload()
+            else{
+                alert("Selecione um Restaurante")
+            }
         })()
     }
 
@@ -76,7 +80,7 @@ export default function DashForm(){
                     size = "small"
                     startIcon = {<EditIcon />}
                     color = "primary"
-                    href = "/edit" 
+                    href = "/edit"
                     variant  = "contained"
                     ></Button>
 
@@ -84,7 +88,7 @@ export default function DashForm(){
                     size = "small"
                     startIcon = {<DeleteOutlineIcon />}
                     color = "secondary"
-                    onClick = {handleSubmit}
+                    onClick = {handleDelete}
                     ></Button>
                 </Grid>
 
