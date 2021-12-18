@@ -16,13 +16,8 @@ const RestaurantService = {
         return data;
     },
 
-    updateRestaurant: async (id, employee) => {
-        const { data } = await Api.put(`/nutemployee/${id}`, employee);
-        return data;
-    },
-
-    deleteRestaurant: async (id) => {
-        const { data } = await Api.delete(`/nutemployee/${id}`);
+    updateAdm: async (id, adm) => {
+        const { data } = await Api.put(`/admin/${id}`, adm);
         return data;
     }
 };

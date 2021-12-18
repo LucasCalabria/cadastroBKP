@@ -1,19 +1,19 @@
-import React, {useEffect, useState} from "react"
+import React, { useState } from "react"
 import { Grid } from "@material-ui/core"
 import SaveIcon from '@mui/icons-material/Save'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import Form from "../../layouts/form"
-import {Input, Button} from "../../controls"
+import { Input, Button } from "../../controls"
 import RestaurantService from "../../service/restaurant"
+import { useNavigate } from "react-router-dom"
 
 export default function AddForm(props){
+    const navigate = useNavigate()
     const [flag, setFlag] = useState(props.edit)
-    const [editId, setEditId] = useState(props.editId)
+    const [editedFlag, setEditedFlag] = useState(false)
 
-    //let window = (localStorage.getItem("storageName"))
-    //console.log(window)
-    
-    const idAdm  = 0
+    let editId = Number((localStorage.getItem("editId")))
+    let idAdm  = Number((localStorage.getItem("idAdm")))
 
     const [name,   setName]   = useState('')
     const [tel,    setTel]    = useState('')
@@ -34,13 +34,6 @@ export default function AddForm(props){
     const handleChangeRua    = e => setRua(e.target.value)
     const handleChangePreco  = e => setPreco(e.target.value)
     const handleChangeDesc   = e => setDesc(e.target.value)
-
-    /*useEffect(() => {
-        (async function getAdmName(){
-            const resp = await RestaurantService.getAllAdm()
-            console.log(resp)
-        })()
-    })*/
     
     if (flag=="true"){
         (async function getRestaurant(){
@@ -58,6 +51,7 @@ export default function AddForm(props){
             setDesc(rest["desc"])
 
             setFlag("false")
+            setEditedFlag(true)
         })()
     }
 
@@ -165,8 +159,12 @@ export default function AddForm(props){
                 }
 
                 try{
-                    if(flag=="false"){
-                        temp.idRest = admin["restaurants"].length
+                    if(!editedFlag){
+                        let tam = admin["restaurants"].length-1
+
+                        if (tam==(-1)) temp.idRest=0
+                        else temp.idRest = admin["restaurants"][tam]["idRest"]+1
+
                         admin["restaurants"].push(temp)
                     }
                     else{
@@ -174,7 +172,9 @@ export default function AddForm(props){
                         admin["restaurants"][editId] = temp
                     }
                     RestaurantService.createNewRestaurant(idAdm, admin)
+                    setEditedFlag(false)
                     alert("Salvo")
+                    navigate(-1)
                 }
                 catch(error){
                     console.log("ERROR", error)
@@ -264,7 +264,6 @@ export default function AddForm(props){
                 </Grid>
                 <Grid item xs={12}>
                     <Input
-                    //disabled
                     value = {desc}
                     onChange={handleChangeDesc}
                     label = "Descrição"

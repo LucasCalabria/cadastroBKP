@@ -10,11 +10,13 @@ export default function DashForm(){
     const [selected, setSelected] = useState('')
     const [name, setName] = useState('Nome')
     const [restaurantes, setRestaurantes] = useState([])
-    let allRestaurants = [{id:0, title: 'Selecione'}]
+    let allRestaurants =[]
+
+    const idAdm = 0
 
     useEffect(() => {
         (async function getAdmById(){
-            const resp = await RestaurantService.getAdmById(1)
+            const resp = await RestaurantService.getAdmById(idAdm)
             setName(resp["name"])
             if(resp["restaurants"]){
                 setRestaurantes(resp["restaurants"].map(function(item){
@@ -22,39 +24,51 @@ export default function DashForm(){
                 }))
             }
             else{
-                allRestaurants = [{id:0, title: 'Selecione'}]
+                allRestaurants = []
             }
         })()
     },[])
 
-    for(var i=1; i<=restaurantes.length; i++){
-        let aux = {id:i, title: restaurantes[i-1]}
+    for(var i=0; i<restaurantes.length; i++){
+        let aux = {id:i, title: restaurantes[i]}
         allRestaurants.push(aux)
     }
 
-    console.log(selected)
-    localStorage.setItem("storageName",selected)
+    localStorage.setItem("editId",selected)
+    localStorage.setItem("idAdm", idAdm)
 
-    //Nao ta funcionando
-    const handleClick = () => {
-        console.log("come handle click fun")
-        localStorage.setItem("storageName",selected)
+    const handleSubmit = () =>{
+        (async function removeRestaurant(){
+            const resp = await RestaurantService.getAdmById(idAdm)
+            let rests = resp["restaurants"]
+            console.log(rests)
+
+            rests.splice(selected, 1)
+            for(let j=selected; j<rests.length;j++){
+                rests[j]["idRest"] -= 1
+            }
+            let admin = resp
+            admin["restaurants"] = rests
+
+            RestaurantService.updateAdm(idAdm, admin)
+            alert("Restaurante Removido com Sucesso")
+            window.location.reload()
+        })()
     }
 
     return(
-        <Form>
+        <Form >
             <Grid container>
                 <Grid item xs={6}>
                     <Input
                     disabled
                     label = {name}
                     name = "nome"
-                    //value = {values.admNome}
                     />
                     <Select
                         label = "Restaurante"
                         name = "restauranteId"
-                        onChange = {event => {setSelected(event.target.value-1)}}
+                        onChange = {event => {setSelected(event.target.value)}}
                         options = {allRestaurants}
                     />
 
@@ -64,13 +78,13 @@ export default function DashForm(){
                     color = "primary"
                     href = "/edit" 
                     variant  = "contained"
-                    onClick={handleClick}
                     ></Button>
 
                     <Button
                     size = "small"
                     startIcon = {<DeleteOutlineIcon />}
                     color = "secondary"
+                    onClick = {handleSubmit}
                     ></Button>
                 </Grid>
 

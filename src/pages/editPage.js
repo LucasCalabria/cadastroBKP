@@ -9,17 +9,8 @@ const themeAdd = createTheme({
     secondary: { main: '#008000'}
   }
 });
-/*
-function Render() {
-  const { data } = useLocation().data;
-  return (
-    data
-  )
-}*/
 
 function EditPage(){
-    //let a = Render
-    //console.log(a)
     return (
     <Container maxWidth = "md">
       <Typography
@@ -32,7 +23,7 @@ function EditPage(){
       <MuiThemeProvider theme = {themeAdd}>
       <Add
         edit = "true"
-        editId = "0">
+      >
       </Add>
       </MuiThemeProvider>
 
