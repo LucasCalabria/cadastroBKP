@@ -145,7 +145,7 @@ export default function AddForm(props){
         e.preventDefault()
         if(validateForm()){
             (async function getAdmById(){
-                const admin = await RestaurantService.getAdmById(idAdm)
+                //const admin = await RestaurantService.getAdmById(idAdm)
                 let temp ={
                     name: name,
                     tel: tel,
@@ -157,29 +157,25 @@ export default function AddForm(props){
                     price: preco,
                     desc: desc
                 }
-
+                
                 try{
                     if(!editedFlag){
-                        let tam = admin["restaurants"].length-1
-
-                        if (tam==(-1)) temp.idRest=0
-                        else temp.idRest = admin["restaurants"][tam]["idRest"]+1
-
-                        admin["restaurants"].push(temp)
+                        await RestaurantService.createNewRestaurant(idAdm, temp)
                     }
                     else{
                         temp.idRest = editId
-                        admin["restaurants"][editId] = temp
+                        const data = await RestaurantService.updateRestaurant(idAdm, temp)
                     }
-                    RestaurantService.createNewRestaurant(idAdm, admin)
-                    setEditedFlag(false)
+
+                    setEditedFlag(false)                
                     alert("Salvo")
                     navigate(-1)
+                    
                 }
                 catch(error){
                     console.log("ERROR", error)
                     alert("Erro de salvamento")
-                } 
+                }
             })()      
         }
         else{

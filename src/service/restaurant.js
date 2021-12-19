@@ -1,25 +1,25 @@
-import Api from './api';
+import Api from './api'
 
 const RestaurantService = { 
-    getAllAdm: async () => {
-        const { data } = await Api.get('/hello');
-        return data;
-    },
-
     getAdmById: async (id) => {
-        const { data } = await Api.get(`/admin/${id}`, id);
-        return data;
+        const { data } = await Api.get(`/admin/${id}`, id)
+        return data
     },
 
     createNewRestaurant: async (id, restaurant) => {
-        const { data } = await Api.put(`/admin/${id}`, restaurant);
-        return data;
+        const { data } = await Api.post(`/admin/addRestaurant/${id}`, restaurant)
+        return data
     },
 
-    updateAdm: async (id, adm) => {
-        const { data } = await Api.put(`/admin/${id}`, adm);
-        return data;
+    updateRestaurant: async (id, restaurant) => {
+        const { data } = await Api.post(`/admin/editRestaurant/${id}`, restaurant)
+        return data
+    },
+
+    deleteRestaurant: async (idAdm, idRest) => {
+        const { data } = await Api.post(`/admin/deleteRestaurant/${idAdm}`, idRest)
+        return data
     }
-};
+}
 
 export default RestaurantService

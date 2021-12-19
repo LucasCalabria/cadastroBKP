@@ -1,8 +1,7 @@
 import React from "react"
 import { Container, Typography } from "@material-ui/core"
 import Add from "../components/add"
-import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
-import { useLocation } from "react-router-dom";
+import { MuiThemeProvider, createTheme } from '@material-ui/core/styles'
 
 const themeAdd = createTheme({
   palette: {
